@@ -5,7 +5,8 @@
   "main": "gn-launchpad.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc && cp src/max/gn-launchpad.maxpat dist"
+    "build": "tsc && cp src/max/gn-launchpad.maxpat dist",
+    "watch": "tsc --watch"
   },
   "author": "vsm22",
   "license": "ISC",
