@@ -4,6 +4,17 @@ class GnLpUtil {
     static getXYButton(row, col) {
         return (row * 16) + col;
     }
+    /**
+     * Get row and col of button for given midi pitch number
+     * @param midiPitch
+     */
+    static getRowCol(midiPitch) {
+        let rowcol;
+        let row = Math.floor(midiPitch / 16);
+        let col = midiPitch % 16;
+        rowcol = [row, col];
+        return rowcol;
+    }
 }
 GnLpUtil.colors = {
     'off': 12,
