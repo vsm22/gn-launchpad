@@ -15,6 +15,9 @@ class GnLpUtil {
         rowcol = [row, col];
         return rowcol;
     }
+    static parseColor(colorName) {
+        return this.colors[colorName];
+    }
 }
 GnLpUtil.colors = {
     'off': 12,

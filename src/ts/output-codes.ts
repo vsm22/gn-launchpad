@@ -7,7 +7,6 @@ class OutputCodes {
     static mediumBrightnessTest = '176 0 126';
     static fullBrightnessTest = '176 0 127';
 
-
 }
 
 export default OutputCodes;

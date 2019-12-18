@@ -7,9 +7,15 @@ const gn_lp_util_1 = __importDefault(require("./gn-lp-util"));
 const output_codes_1 = __importDefault(require("./output-codes"));
 class GnLaunchpad {
     constructor(midiIn, midiOut) {
+        //FIXME
+        this.curCount = 0;
         this.midiIn = midiIn;
         this.midiOut = midiOut;
         this.reset();
+    }
+    loadScenes(scenes) {
+        scenes.forEach(scene => {
+        });
     }
     onMessage(handler) {
         this.midiIn.onMessage((msg) => {
@@ -37,7 +43,12 @@ class GnLaunchpad {
         });
     }
     handleXYGridEvent(row, col, vel) {
-        this.midiOut.send("xy: " + row + " " + col + " " + vel);
+        this.midiOut.send("vel: " + vel);
+        if (vel > 0) {
+            let colors = ['red', 'green', 'amber', 'off'];
+            this.midiOut.send('144 ' + gn_lp_util_1.default.getXYButton(row, col) + ' ' + gn_lp_util_1.default.colors[colors[this.curCount % colors.length]]);
+            this.curCount++;
+        }
     }
     handlePlayBtnEvent(row, vel) {
         this.midiOut.send('play: ' + row + ' ' + vel);

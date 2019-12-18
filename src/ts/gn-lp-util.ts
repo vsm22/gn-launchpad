@@ -32,6 +32,10 @@ class GnLpUtil {
 
         return rowcol;
     }
+
+    static parseColor(colorName : string) {
+        return this.colors[colorName];
+    }
 }
 
 export default GnLpUtil;

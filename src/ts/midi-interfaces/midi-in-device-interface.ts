@@ -1,5 +1,5 @@
 interface MidiInDeviceInterface {
-    onMessage(msg : string) : void;
+    onMessage(handler : (msg : string) => void) : void;
 }
 
 export default MidiInDeviceInterface;

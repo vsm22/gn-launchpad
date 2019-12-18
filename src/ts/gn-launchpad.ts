@@ -3,17 +3,28 @@ import Util from './gn-lp-util';
 import MidiInDeviceInterface from './midi-interfaces/midi-in-device-interface';
 import MidiOutDeviceInterface from './midi-interfaces/midi-out-device-interface';
 import OutputCodes from './output-codes';
+import Scene from './scenes/scene';
 
 class GnLaunchpad {
 
     midiIn : MidiInDeviceInterface;
     midiOut: MidiOutDeviceInterface;
 
+    scenes : Array<Scene>;
+    curScene : Scene;
+
     constructor(midiIn : MidiInDeviceInterface, midiOut : MidiOutDeviceInterface) {
         this.midiIn = midiIn;
         this.midiOut = midiOut;
         this.reset();
     }
+
+    loadScenes(scenes : Array<object>) {
+        scenes.forEach(scene => {
+
+        });
+    }   
+    
 
     onMessage(handler : (msg : string) => void) : void {
         this.midiIn.onMessage((msg) => {
@@ -42,8 +53,17 @@ class GnLaunchpad {
         });
     }
 
+    //FIXME
+    curCount = 0;
+
     handleXYGridEvent(row : number, col : number, vel : number) {
-        this.midiOut.send("xy: " + row + " " + col + " " + vel);
+        this.midiOut.send("vel: " + vel);
+
+        if (vel > 0) {
+            let colors = ['red', 'green', 'amber', 'off'];
+            this.midiOut.send('144 ' + Util.getXYButton(row, col) + ' ' + Util.colors[colors[this.curCount % colors.length]]);
+            this.curCount++;
+        }
     }
 
     handlePlayBtnEvent(row : number, vel : number) {
