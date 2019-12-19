@@ -15,7 +15,7 @@
     "include": [
         "src/ts/*",
         "src/ts/midi-interfaces/*",
-        "/Users/Shared/Max 8/Library",
+        "/Users/Shared/Max 8/Library", "src/ts/buttons/xy-button.ts", "src/ts/buttons/button-behavior-mode.ts", "src/ts/buttons/button-behavior.ts",
     ],
     "exclude": [
         "node_modules",

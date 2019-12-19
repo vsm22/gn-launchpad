@@ -1,0 +1,23 @@
+{
+    "scenes": [{
+        "sceneName": "toggler",
+        "sceneIndex": 0,
+        "xyButtons": {
+            "all": {
+                "behavior": {
+                    "mode": "toggle",
+                    "stages": [
+                        {
+                            "index": 0,
+                            "color": "off"
+                        },
+                        {
+                            "index": 1,
+                            "color": "red"
+                        }
+                    ]
+                }
+            }
+        }
+    }]
+}

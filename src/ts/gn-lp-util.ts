@@ -33,7 +33,7 @@ class GnLpUtil {
         return rowcol;
     }
 
-    static parseColor(colorName : string) {
+    static parseColor(colorName : string) : number {
         return this.colors[colorName];
     }
 }

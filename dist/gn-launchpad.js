@@ -3,70 +3,46 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const gn_lp_util_1 = __importDefault(require("./gn-lp-util"));
 const output_codes_1 = __importDefault(require("./output-codes"));
+const scene_1 = __importDefault(require("./scenes/scene"));
 class GnLaunchpad {
-    constructor(midiIn, midiOut) {
-        //FIXME
-        this.curCount = 0;
+    constructor(midiIn, toLaunchpad, midiOut, textOut, configJsonPath) {
+        this.scenes = [];
+        this.curSceneIdx = 0;
         this.midiIn = midiIn;
+        this.toLaunchpad = toLaunchpad;
         this.midiOut = midiOut;
+        this.textOut = textOut;
+        configJsonPath = (configJsonPath != undefined && configJsonPath != null && configJsonPath != '') ?
+            configJsonPath : './config/launchpad_scenes.json';
+        this.loadScenes(configJsonPath);
         this.reset();
     }
-    loadScenes(scenes) {
-        scenes.forEach(scene => {
-        });
-    }
-    onMessage(handler) {
-        this.midiIn.onMessage((msg) => {
-            let midiBytes = msg.split(' ').map(byteStr => parseInt(byteStr));
-            let event = midiBytes[0];
-            let rowCol = gn_lp_util_1.default.getRowCol(midiBytes[1]);
-            let row = rowCol[0];
-            let col = rowCol[1];
-            let vel = midiBytes[2];
-            // 144 is button grid (cols 0 - 7) and right-hand-side 'play' buttons (col 8)
-            if (event === 144) {
-                // is it X-Y grid buttons ( < 8) or right-hand-side 'play' buttons?
-                if (col < 8) {
-                    this.handleXYGridEvent(row, col, vel);
-                }
-                else {
-                    this.handlePlayBtnEvent(row, vel);
-                }
-                // 176 is top-row menu and user buttons
-            }
-            else if (event === 176) {
-                col = col - 8;
-                this.handleMenuBtnEvent(col, vel);
-            }
-        });
-    }
-    handleXYGridEvent(row, col, vel) {
-        this.midiOut.send("vel: " + vel);
-        if (vel > 0) {
-            let colors = ['red', 'green', 'amber', 'off'];
-            this.midiOut.send('144 ' + gn_lp_util_1.default.getXYButton(row, col) + ' ' + gn_lp_util_1.default.colors[colors[this.curCount % colors.length]]);
-            this.curCount++;
+    loadScenes(filepath) {
+        let configJson = require(filepath);
+        if (configJson['scenes']) {
+            let scenes = configJson['scenes'];
+            scenes.forEach(sceneJson => {
+                let newScene = new scene_1.default(this.midiIn, this.toLaunchpad, sceneJson);
+                this.scenes.push(newScene);
+            });
         }
     }
-    handlePlayBtnEvent(row, vel) {
-        this.midiOut.send('play: ' + row + ' ' + vel);
-    }
-    handleMenuBtnEvent(col, vel) {
-        this.midiOut.send('menu: ' + col + ' ' + vel);
+    handleMidiMessage(msg) {
+        this.scenes[this.curSceneIdx].handleMidiEvent(msg);
+        //
     }
     reset() {
-        this.midiOut.send(output_codes_1.default.reset);
+        this.toLaunchpad.send(output_codes_1.default.reset);
     }
     lowBrightnessTest() {
-        this.midiOut.send(output_codes_1.default.lowBrightnessTest);
+        this.toLaunchpad.send(output_codes_1.default.lowBrightnessTest);
     }
     mediumBrightnessTest() {
-        this.midiOut.send(output_codes_1.default.mediumBrightnessTest);
+        this.toLaunchpad.send(output_codes_1.default.mediumBrightnessTest);
     }
     fullBrightnessTest() {
-        this.midiOut.send(output_codes_1.default.fullBrightnessTest);
+        this.toLaunchpad.send(output_codes_1.default.fullBrightnessTest);
     }
 }
 exports.default = GnLaunchpad;

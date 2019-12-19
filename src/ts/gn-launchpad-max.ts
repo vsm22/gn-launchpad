@@ -3,18 +3,14 @@ import Launchpad from './gn-launchpad';
 import MaxMidiOutDevice from './midi-interfaces/max-midi-out-device';
 import MaxMidiInDevice from './midi-interfaces/max-midi-in-device';
 
-// const lp = new Launchpad(new MaxMidiInDevice(), new MaxMidiOutDevice());
+const midiInDevice = new MaxMidiInDevice();
+const toLaunchpad = new MaxMidiOutDevice('to_launchpad');
+const midiOutDevice = new MaxMidiOutDevice('launchpad_midi');
+const textOutDevice = new MaxMidiOutDevice('launchpad_text');
 
-// tslp.onMessage(msg => { Max.outlet(msg); });
+const launchpad = new Launchpad(midiInDevice, toLaunchpad, midiOutDevice, textOutDevice, '');
 
-// let isBang : boolean = false;
+Max.addHandler('from_launchpad', (msg) => {
+    launchpad.handleMidiMessage(msg);
+});
 
-// Max.addHandler('bang', () => {
-//     if (isBang) {
-//         lp.reset();
-//         isBang = false;
-//     } else {
-//         lp.fullBrightnessTest();
-//         isBang = true;
-//     }
-// });

@@ -4,7 +4,10 @@ var ButtonBehaviorMode;
 (function (ButtonBehaviorMode) {
     ButtonBehaviorMode["toggle"] = "toggle";
     ButtonBehaviorMode["toggleRelease"] = "toggleRelease";
-    ButtonBehaviorMode["push"] = "push"; // push means state changes on both zero and non-zero velocity
+    ButtonBehaviorMode["push"] = "push";
+    ButtonBehaviorMode["hold"] = "hold";
+    ButtonBehaviorMode["holdRelease"] = "holdRelease";
+    ButtonBehaviorMode["doubleTap"] = "doubleTap"; // double-tap - similar to doulbe-click
 })(ButtonBehaviorMode || (ButtonBehaviorMode = {}));
 exports.default = ButtonBehaviorMode;
 //# sourceMappingURL=button-behavior-mode.js.map
