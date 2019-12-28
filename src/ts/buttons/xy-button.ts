@@ -1,21 +1,30 @@
-import ButtonBehavior from './button-behavior';
+import SceneStage from '../scenes/scene-stage';
 import ButtonBehaviorMode from './button-behavior-mode';
 import MidiInDevice from '../midi-interfaces/midi-in-device-interface';
 import MidiOutDevice from '../midi-interfaces/midi-out-device-interface';
+import GnLpUtil from '../gn-lp-util';
 
 class XYButton {
 
+    row : number = 0;
+    col : number = 0;
     curStageIdx : number = 0;
-    stages : Array<ButtonBehavior> = [];
+    sceneStages : Array<SceneStage> = [];
     behaviorMode : ButtonBehaviorMode = ButtonBehaviorMode.toggle;
     waitingToRelease : boolean = false;
 
     midiIn : MidiInDevice;
     toLaunchpad : MidiOutDevice;
  
-    constructor(midiIn : MidiInDevice, toLauchpad : MidiOutDevice) {
+    constructor(midiIn : MidiInDevice, toLauchpad : MidiOutDevice, row : number, col : number) {
         this.midiIn = midiIn;
         this.toLaunchpad = toLauchpad;
+        this.row = row;
+        this.col = col;
+    }
+
+    addSceneStage(sceneStage : SceneStage) {
+        this.sceneStages.push(sceneStage);
     }
 
     handleNoteEvent(vel : number) {
@@ -47,13 +56,16 @@ class XYButton {
     }
 
     nextStage() {
-        this.curStageIdx = (this.curStageIdx + 1) % this.stages.length;
+        console.log('numStages: ' + this.sceneStages.length);
+        console.log('curStage: ' + this.curStageIdx);
+        this.curStageIdx = (this.curStageIdx + 1) % this.sceneStages.length;
+        this.executeCurStage();
 
     }
 
     executeCurStage() {
-        let curStage = this.stages[this.curStageIdx];
-        
+        let curStage = this.sceneStages[this.curStageIdx];
+        this.toLaunchpad.send("144 " + GnLpUtil.getXYButton(this.row, this.col) + " " + curStage.color);
     }
 }
 

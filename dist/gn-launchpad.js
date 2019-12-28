@@ -20,9 +20,11 @@ class GnLaunchpad {
     }
     loadScenes(filepath) {
         let configJson = require(filepath);
+        console.log('loaded json...');
         if (configJson['scenes']) {
             let scenes = configJson['scenes'];
             scenes.forEach(sceneJson => {
+                console.log('construct scene...');
                 let newScene = new scene_1.default(this.midiIn, this.toLaunchpad, sceneJson);
                 this.scenes.push(newScene);
             });

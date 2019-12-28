@@ -3,7 +3,7 @@ import MidiInDeviceInterface from '../midi-interfaces/midi-in-device-interface';
 import MidiOutDeviceInterface from '../midi-interfaces/midi-out-device-interface';
 import XYButton from '../buttons/xy-button';
 import ButtonBehaviorMode from '../buttons/button-behavior-mode';
-import ButtonBehavior from '../buttons/button-behavior';
+import SceneStage from './scene-stage';
 
 class Scene {
 
@@ -11,119 +11,105 @@ class Scene {
     xyButtons : Array<Array<XYButton>> = [];
 
     midiIn : MidiInDeviceInterface;
-    midiOut: MidiOutDeviceInterface;
+    toLaunchpad: MidiOutDeviceInterface;
 
-    constructor(midiIn : MidiInDeviceInterface, midiOut : MidiOutDeviceInterface, sceneJson : object) {
+    constructor(midiIn : MidiInDeviceInterface, toLaunchpad : MidiOutDeviceInterface, sceneJson : object) {
         this.midiIn = midiIn;
-        this.midiOut = midiOut;
+        this.toLaunchpad = toLaunchpad;
 
         for (let row = 0; row < 8; row++) {
-            console.log('...will init');
-            console.log('...helllo?');
             this.xyButtons[row] = [];
-            console.log('...init row: ' + this.xyButtons[row]);
             for (let col = 0; col < 8; col++) {
-                this.xyButtons[row][col] = new XYButton(midiIn, midiOut);
+                console.log("construct row: " + row);
+                console.log("construct col: " + col);
+
+                this.xyButtons[row][col] = new XYButton(midiIn, toLaunchpad, row, col);
             }
         }
+        console.log('before loadSceneFromJson...');
         this.loadSceneFromJson(sceneJson);
     }
 
     loadSceneFromJson(json : object) {
         this.sceneName = json['sceneName'];
+        console.log('sceneName: ' + this.sceneName);
+        console.log('construct loadSceneFromJson...');
 
-        if (json['xyButtons']) {
+        if (json['handlers'] !== undefined) {
+            console.log('handlers');
 
-            // 'all' means behavior applicable for all buttons
-            if (json['xyButtons']['all']) {
-        
-                if (json['xyButtons']['all']['behavior']) {
+            if (json['handlers']['xyButtons']) {
+                console.log('xyButtons');
 
-                    let behavior = json['xyButtons']['all']['behavior'];
-
+                // 'all' means behavior applicable for all buttons
+                if (json['handlers']['xyButtons']['all']) {
+                    console.log('all');
+            
+                    let behavior = json['handlers']['xyButtons']['all'];
                     // Default behavior mode is 'toggle', otherwise take from json
                     let behaviorMode : ButtonBehaviorMode = ButtonBehaviorMode.toggle;
                     if (behavior['mode'] && 
                         (behavior['mode'] === ButtonBehaviorMode.toggle 
                         || behavior['mode'] === ButtonBehaviorMode.toggleRelease
-                        || behavior['mode'] === ButtonBehaviorMode.push)) {
+                        || behavior['mode'] === ButtonBehaviorMode.push
+                        || behavior['mode'] === ButtonBehaviorMode.hold
+                        || behavior['mode'] === ButtonBehaviorMode.holdRelease
+                        || behavior['mode'] === ButtonBehaviorMode.doubleTap)) {
+
                         behaviorMode = behavior['mode'];
                     }
 
-                    let jsonStages : Array<object> = json['xyButtons']['all']['behavior']['stages'];
-                    console.log('json stages ==> ' + jsonStages);
+                    let jsonStages : Array<object> = json['handlers']['xyButtons']['all']['stages'];
+                    console.log('jsonStages: ' + jsonStages);
 
                     [].concat(...this.xyButtons).forEach(btn => {
+                        console.log("xyRow: " + btn.row);
+                        console.log("xyCol: " + btn.col);
 
                         btn.mode = behaviorMode;
-
-                        jsonStages.forEach((jsonStage, i) => {
-
-                            // Set the stage index - the index is the order in which the stage appears
-                            let stageIndex;
-                            if (jsonStage['index']) {
-                                stageIndex = jsonStage['index'];
-                            } else {
-                                stageIndex = i;
-                            }
-
-                            if (!btn.stages[stageIndex]) {
-                                btn.stages[stageIndex] = new ButtonBehavior();
-                            }
-
-                            // Set stage behavior properties
-                            if (jsonStage['color']) {
-                                btn.stages[stageIndex].color = Util.parseColor(jsonStage['color']);
-                            }
-
-                            if (jsonStage['colorCode']) {
-                                btn.stages[stageIndex].color = jsonStage['colorCode'];
-                            }
+                        jsonStages.forEach(jsonStage => {
+                            btn.addSceneStage(new SceneStage(jsonStage));
                         });
                     });
+                    
                 }
             }
         }
-
     }
 
     handleMidiEvent(msg : string) {
-        console.log('msg: ' + msg);
+
         let midiBytes : Array<number> = msg.split(' ').map(byteStr => parseInt(byteStr));
-            let event = midiBytes[0];
-            let rowCol = Util.getRowCol(midiBytes[1]);
-            let row = rowCol[0];
-            let col = rowCol[1];
-            let vel = midiBytes[2];
-            
-            // 144 is button grid (cols 0 - 7) and right-hand-side 'launch' buttons (col 8)
-            if (event === 144) {
-                
-                // is it X-Y grid buttons ( < 8) or right-hand-side 'launch' buttons?
-                if (col < 8) {
-                    this.handleXYBtnEvent(row, col, vel);
-                } else {
-                    this.handleLaunchBtnEvent(row, vel);
-                }
-            
-            // 176 is top-row menu and user buttons
-            } else if (event === 176) {
-                col = col - 8;     
-                this.handleMenuBtnEvent(col, vel);
-            } 
+        let event = midiBytes[0];
+        let rowCol = Util.getRowCol(midiBytes[1]);
+        let row = rowCol[0];
+        let col = rowCol[1];
+        let vel = midiBytes[2];
+        
+        // 144 is button grid (cols 0 - 7) and right-hand-side 'launch' buttons (col 8)
+        if (event === 144) {
+            // is it X-Y grid buttons ( < 8) or right-hand-side 'launch' buttons?
+            if (col < 8) {
+                this.handleXYBtnEvent(row, col, vel);
+            } else {
+                this.handleLaunchBtnEvent(row, vel);
+            }
+        } else if (event === 176) { // 176 is top-row menu and user buttons
+            col = col - 8;     
+            this.handleMenuBtnEvent(col, vel);
+        } 
     }
 
     handleXYBtnEvent(row : number, col : number, vel : number) {
-        this.midiOut.send("vel: " + vel);
         this.xyButtons[row][col].handleNoteEvent(vel);
     }
 
     handleLaunchBtnEvent(row : number, vel : number) {
-        this.midiOut.send('play: ' + row + ' ' + vel);
+        this.toLaunchpad.send('play: ' + row + ' ' + vel);
     }
 
     handleMenuBtnEvent(col : number, vel : number) {
-        this.midiOut.send('menu: ' + col + ' ' + vel);
+        this.toLaunchpad.send('menu: ' + col + ' ' + vel);
     }
 }
 

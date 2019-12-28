@@ -2,19 +2,26 @@
     "scenes": [{
         "sceneName": "toggler",
         "sceneIndex": 0,
-        "xyButtons": {
-            "all": {
-                "behavior": {
+        "handlers": {
+            "xyButtons": {
+                "all": {
                     "mode": "toggle",
                     "stages": [
                         {
-                            "index": 0,
-                            "color": "off"
+                            "color": "off",
+                            "midiOut": "144 0 12",
+                            "textOut": "144 0 12"
                         },
                         {
-                            "index": 1,
                             "color": "red"
+                        },
+                        {
+                            "color": "green"
+                        },
+                        {
+                            "color": "green-flash"
                         }
+
                     ]
                 }
             }
