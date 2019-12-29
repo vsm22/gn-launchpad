@@ -66,6 +66,15 @@ class XYButton {
     executeCurStage() {
         let curStage = this.sceneStages[this.curStageIdx];
         this.toLaunchpad.send("144 " + GnLpUtil.getXYButton(this.row, this.col) + " " + curStage.color);
+        this.executeOthers();
+    }
+
+    executeOthers() {
+        let curStage = this.sceneStages[this.curStageIdx];
+        curStage.others.forEach(other => {
+            console.log("other " + other.row + " " + other.col + " " + "144 " + GnLpUtil.getXYButton(other.row, other.col) + " " + other.color);
+            this.toLaunchpad.send("144 " + GnLpUtil.getXYButton(other.row, other.col) + " " + other.color);
+        });
     }
 }
 

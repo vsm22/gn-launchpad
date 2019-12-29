@@ -3,8 +3,10 @@
         "sceneName": "toggler",
         "sceneIndex": 0,
         "handlers": {
-            "xyButtons": {
-                "all": {
+            "xyButtons": [
+                {
+                    "row": "all",
+                    "col": "all",
                     "mode": "toggle",
                     "stages": [
                         {
@@ -13,18 +15,20 @@
                             "textOut": "144 0 12"
                         },
                         {
-                            "color": "red"
-                        },
-                        {
-                            "color": "green"
-                        },
-                        {
-                            "color": "green-flash"
+                            "color": "red",
+                            "others": [{
+                                "row": "all",
+                                "col": "all",
+                                "color": "off"
+                            }]
                         }
-
                     ]
+                },
+                {
+                    "row": 0,
+                    "col": "all"
                 }
-            }
+            ]
         }
     }]
 }

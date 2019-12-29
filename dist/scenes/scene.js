@@ -31,32 +31,34 @@ class Scene {
             console.log('handlers');
             if (json['handlers']['xyButtons']) {
                 console.log('xyButtons');
-                // 'all' means behavior applicable for all buttons
-                if (json['handlers']['xyButtons']['all']) {
-                    console.log('all');
-                    let behavior = json['handlers']['xyButtons']['all'];
-                    // Default behavior mode is 'toggle', otherwise take from json
-                    let behaviorMode = button_behavior_mode_1.default.toggle;
-                    if (behavior['mode'] &&
-                        (behavior['mode'] === button_behavior_mode_1.default.toggle
-                            || behavior['mode'] === button_behavior_mode_1.default.toggleRelease
-                            || behavior['mode'] === button_behavior_mode_1.default.push
-                            || behavior['mode'] === button_behavior_mode_1.default.hold
-                            || behavior['mode'] === button_behavior_mode_1.default.holdRelease
-                            || behavior['mode'] === button_behavior_mode_1.default.doubleTap)) {
-                        behaviorMode = behavior['mode'];
+                json['handlers']['xyButtons'].forEach(buttonJson => {
+                    if (buttonJson['row'] === 'all') {
+                        if (buttonJson['col'] === 'all') {
+                            let behavior = buttonJson['mode'];
+                            // Default behavior mode is 'toggle', otherwise take from json
+                            let behaviorMode = button_behavior_mode_1.default.toggle;
+                            if (behavior['mode'] &&
+                                (behavior['mode'] === button_behavior_mode_1.default.toggle
+                                    || behavior['mode'] === button_behavior_mode_1.default.toggleRelease
+                                    || behavior['mode'] === button_behavior_mode_1.default.push
+                                    || behavior['mode'] === button_behavior_mode_1.default.hold
+                                    || behavior['mode'] === button_behavior_mode_1.default.holdRelease
+                                    || behavior['mode'] === button_behavior_mode_1.default.doubleTap)) {
+                                behaviorMode = behavior['mode'];
+                            }
+                            let jsonStages = buttonJson['stages'];
+                            console.log('jsonStages: ' + jsonStages);
+                            [].concat(...this.xyButtons).forEach(btn => {
+                                console.log("xyRow: " + btn.row);
+                                console.log("xyCol: " + btn.col);
+                                btn.mode = behaviorMode;
+                                jsonStages.forEach(jsonStage => {
+                                    btn.addSceneStage(new scene_stage_1.default(jsonStage, btn.row, btn.col));
+                                });
+                            });
+                        }
                     }
-                    let jsonStages = json['handlers']['xyButtons']['all']['stages'];
-                    console.log('jsonStages: ' + jsonStages);
-                    [].concat(...this.xyButtons).forEach(btn => {
-                        console.log("xyRow: " + btn.row);
-                        console.log("xyCol: " + btn.col);
-                        btn.mode = behaviorMode;
-                        jsonStages.forEach(jsonStage => {
-                            btn.addSceneStage(new scene_stage_1.default(jsonStage));
-                        });
-                    });
-                }
+                });
             }
         }
     }

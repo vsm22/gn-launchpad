@@ -60,6 +60,14 @@ class XYButton {
     executeCurStage() {
         let curStage = this.sceneStages[this.curStageIdx];
         this.toLaunchpad.send("144 " + gn_lp_util_1.default.getXYButton(this.row, this.col) + " " + curStage.color);
+        this.executeOthers();
+    }
+    executeOthers() {
+        let curStage = this.sceneStages[this.curStageIdx];
+        curStage.others.forEach(other => {
+            console.log("other " + other.row + " " + other.col + " " + "144 " + gn_lp_util_1.default.getXYButton(other.row, other.col) + " " + other.color);
+            this.toLaunchpad.send("144 " + gn_lp_util_1.default.getXYButton(other.row, other.col) + " " + other.color);
+        });
     }
 }
 exports.default = XYButton;

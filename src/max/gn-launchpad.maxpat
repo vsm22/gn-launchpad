@@ -10,7 +10,7 @@
 		}
 ,
 		"classnamespace" : "box",
-		"rect" : [ 34.0, 53.0, 543.0, 813.0 ],
+		"rect" : [ 34.0, 79.0, 1071.0, 787.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 0,
 		"default_fontsize" : 12.0,
@@ -194,12 +194,13 @@
 , 			{
 				"box" : 				{
 					"id" : "obj-2",
+					"linecount" : 2,
 					"maxclass" : "message",
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 237.0, 485.0, 127.0, 22.0 ],
-					"text" : "to_launchpad vel: 0"
+					"patching_rect" : [ 237.0, 485.0, 127.0, 35.0 ],
+					"text" : "to_launchpad 144 99 12"
 				}
 
 			}
@@ -300,7 +301,7 @@
 					"numoutlets" : 1,
 					"offset" : [ 0.0, 0.0 ],
 					"outlettype" : [ "bang" ],
-					"patching_rect" : [ 451.0, 485.0, 823.0, 473.0 ],
+					"patching_rect" : [ 451.0, 485.0, 400.0, 220.0 ],
 					"viewvisibility" : 1
 				}
 
@@ -352,8 +353,6 @@
 					"saved_object_attributes" : 					{
 						"autostart" : 0,
 						"defer" : 0,
-						"node_bin_path" : "",
-						"npm_bin_path" : "",
 						"watch" : 1
 					}
 ,
