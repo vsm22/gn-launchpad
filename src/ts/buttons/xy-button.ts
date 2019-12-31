@@ -3,12 +3,14 @@ import ButtonBehaviorMode from './button-behavior-mode';
 import MidiInDevice from '../midi-interfaces/midi-in-device-interface';
 import MidiOutDevice from '../midi-interfaces/midi-out-device-interface';
 import GnLpUtil from '../gn-lp-util';
+import Scene from '../scenes/scene';
 
 class XYButton {
 
     row : number = 0;
     col : number = 0;
     curStageIdx : number = 0;
+    scene : Scene = null;
     sceneStages : Array<SceneStage> = [];
     behaviorMode : ButtonBehaviorMode = ButtonBehaviorMode.toggle;
     waitingToRelease : boolean = false;
@@ -16,11 +18,12 @@ class XYButton {
     midiIn : MidiInDevice;
     toLaunchpad : MidiOutDevice;
  
-    constructor(midiIn : MidiInDevice, toLauchpad : MidiOutDevice, row : number, col : number) {
+    constructor(midiIn : MidiInDevice, toLauchpad : MidiOutDevice, row : number, col : number, scene : Scene) {
         this.midiIn = midiIn;
         this.toLaunchpad = toLauchpad;
         this.row = row;
         this.col = col;
+        this.scene = scene;
     }
 
     addSceneStage(sceneStage : SceneStage) {
@@ -51,29 +54,41 @@ class XYButton {
 
             }
         } else if (vel === 0) {
-            this.waitingToRelease = false
+            this.waitingToRelease = false;
         }
     }
 
     nextStage() {
-        console.log('numStages: ' + this.sceneStages.length);
-        console.log('curStage: ' + this.curStageIdx);
         this.curStageIdx = (this.curStageIdx + 1) % this.sceneStages.length;
         this.executeCurStage();
-
     }
 
     executeCurStage() {
-        let curStage = this.sceneStages[this.curStageIdx];
+        let curStage = this.sceneStages.find(sceneStage => sceneStage.stageIndex === this.curStageIdx);
         this.toLaunchpad.send("144 " + GnLpUtil.getXYButton(this.row, this.col) + " " + curStage.color);
-        this.executeOthers();
+        this.executeImpacts();
     }
 
-    executeOthers() {
-        let curStage = this.sceneStages[this.curStageIdx];
-        curStage.others.forEach(other => {
-            console.log("other " + other.row + " " + other.col + " " + "144 " + GnLpUtil.getXYButton(other.row, other.col) + " " + other.color);
-            this.toLaunchpad.send("144 " + GnLpUtil.getXYButton(other.row, other.col) + " " + other.color);
+    executeImpacts() {
+        let curStage = this.sceneStages.find(sceneStage => sceneStage.stageIndex === this.curStageIdx);
+        curStage.impacts.forEach(impact => {
+            if (impact.row !== this.row || impact.col !== this.col) {
+
+                if (impact.colorCode) {
+                    let colorCodeMessage = "144 " + GnLpUtil.getXYButton(impact.row, impact.col) + " " + impact.colorCode;
+                    
+                    if (impact.delay) {
+                        setTimeout(() => this.toLaunchpad.send(colorCodeMessage), impact.delay);
+                    } else {
+                        this.toLaunchpad.send(colorCodeMessage);
+                    }
+                }
+            
+                if (impact.stageIndex !== null && impact.stageIndex !== undefined) {
+                    let targetButton = this.scene.xyButtons[impact.row][impact.col];
+                    targetButton.curStageIdx = impact.stageIndex;
+                }
+            }
         });
     }
 }

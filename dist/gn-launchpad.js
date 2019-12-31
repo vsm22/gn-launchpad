@@ -32,7 +32,6 @@ class GnLaunchpad {
     }
     handleMidiMessage(msg) {
         this.scenes[this.curSceneIdx].handleMidiEvent(msg);
-        //
     }
     reset() {
         this.toLaunchpad.send(output_codes_1.default.reset);

@@ -15,22 +15,15 @@ class Scene {
         for (let row = 0; row < 8; row++) {
             this.xyButtons[row] = [];
             for (let col = 0; col < 8; col++) {
-                console.log("construct row: " + row);
-                console.log("construct col: " + col);
-                this.xyButtons[row][col] = new xy_button_1.default(midiIn, toLaunchpad, row, col);
+                this.xyButtons[row][col] = new xy_button_1.default(midiIn, toLaunchpad, row, col, this);
             }
         }
-        console.log('before loadSceneFromJson...');
         this.loadSceneFromJson(sceneJson);
     }
     loadSceneFromJson(json) {
         this.sceneName = json['sceneName'];
-        console.log('sceneName: ' + this.sceneName);
-        console.log('construct loadSceneFromJson...');
         if (json['handlers'] !== undefined) {
-            console.log('handlers');
             if (json['handlers']['xyButtons']) {
-                console.log('xyButtons');
                 json['handlers']['xyButtons'].forEach(buttonJson => {
                     if (buttonJson['row'] === 'all') {
                         if (buttonJson['col'] === 'all') {
@@ -47,13 +40,10 @@ class Scene {
                                 behaviorMode = behavior['mode'];
                             }
                             let jsonStages = buttonJson['stages'];
-                            console.log('jsonStages: ' + jsonStages);
                             [].concat(...this.xyButtons).forEach(btn => {
-                                console.log("xyRow: " + btn.row);
-                                console.log("xyCol: " + btn.col);
                                 btn.mode = behaviorMode;
                                 jsonStages.forEach(jsonStage => {
-                                    btn.addSceneStage(new scene_stage_1.default(jsonStage, btn.row, btn.col));
+                                    btn.addSceneStage(new scene_stage_1.default(jsonStage, btn.row, btn.col, this));
                                 });
                             });
                         }

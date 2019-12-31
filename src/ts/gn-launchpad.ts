@@ -25,6 +25,7 @@ class GnLaunchpad {
         this.textOut = textOut;
         configJsonPath = (configJsonPath != undefined && configJsonPath != null && configJsonPath != '') ?
             configJsonPath : './config/launchpad_scenes.json';
+
         this.loadScenes(configJsonPath);
         this.reset();
     }
@@ -45,7 +46,6 @@ class GnLaunchpad {
 
     handleMidiMessage(msg : string) {
         this.scenes[this.curSceneIdx].handleMidiEvent(msg);
-        //
     }
 
     reset() {
