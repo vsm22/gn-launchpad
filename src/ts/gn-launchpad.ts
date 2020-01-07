@@ -9,15 +9,14 @@ class GnLaunchpad {
     toLaunchpad: MidiOutDeviceInterface;
     midiOut: MidiOutDeviceInterface;
     textOut: MidiOutDeviceInterface;
-
     scenes : Array<Scene> = [];
     curSceneIdx = 0;
     
     constructor(midiIn : MidiInDeviceInterface,
-        toLaunchpad : MidiOutDeviceInterface,
-        midiOut: MidiOutDeviceInterface,
-        textOut: MidiOutDeviceInterface,
-        configJsonPath: string) {
+                    toLaunchpad : MidiOutDeviceInterface,
+                    midiOut: MidiOutDeviceInterface,
+                    textOut: MidiOutDeviceInterface,
+                    configJsonPath: string) {
 
         this.midiIn = midiIn;
         this.toLaunchpad = toLaunchpad;
@@ -32,16 +31,10 @@ class GnLaunchpad {
 
     loadScenes(filepath : string) {
         let configJson = require(filepath);
-        console.log('loaded json...');
-        if (configJson['scenes']) {
-            let scenes = configJson['scenes'];
-            scenes.forEach(sceneJson => {
-                console.log('construct scene...');
-
-                let newScene = new Scene(this.midiIn, this.toLaunchpad, sceneJson);
-                this.scenes.push(newScene);
-            });
+        if (configJson['scenes'] !== undefined) {
+            configJson['scenes'].forEach(sceneJson => this.scenes.push(new Scene(this.midiIn, this.toLaunchpad, sceneJson)));
         }
+        console.log('Cursceneidx: ' + this.curSceneIdx);
     } 
 
     handleMidiMessage(msg : string) {

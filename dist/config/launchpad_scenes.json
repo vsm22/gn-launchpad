@@ -2,29 +2,32 @@
     "scenes": [{
         "sceneName": "toggler",
         "sceneIndex": 0,
-        "handlers": {
-            "xyButtons": [{
-                "row": "all",
-                "col": "all",
-                "mode": "toggle",
-                "stages": [{
-                    "stageIndex": 0,
-                    "color": "off",
-                    "midiOut": "144 0 12",
-                    "textOut": "144 0 12"
-                },
-                {
-                    "stageIndex": 1,
-                    "color": "red",
-                    "impacts": [{
-                        "row": "same",
-                        "col": "all",
-                        "color": "off",
-                        "delay": 1000,
-                        "stageIndex": 0
-                    }]
+        "handlers": [{
+            "type": "xyButton",
+            "row": "all",
+            "col": "all",
+            "handlerStates": [{
+                "index": 0,
+                "color": "off",
+                "transitions": [{
+                    "eventType": "push",
+                    "toIndex": 1
+                }]
+            },
+            {
+                "index": 1,
+                "color": "red",
+                "transitions": [{
+                    "eventType": "push",
+                    "toIndex": 0
+                }],
+                "sideEffects": [{
+                    "row": "same",
+                    "col": "all",
+                    "color": "off"
                 }]
             }]
-        }
+        }]
+        
     }]
 }

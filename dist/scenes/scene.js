@@ -3,85 +3,56 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const gn_lp_util_1 = __importDefault(require("../gn-lp-util"));
-const xy_button_1 = __importDefault(require("../buttons/xy-button"));
-const button_behavior_mode_1 = __importDefault(require("../buttons/button-behavior-mode"));
-const scene_stage_1 = __importDefault(require("./scene-stage"));
+const midi_event_1 = __importDefault(require("./midi-event"));
+const handler_loader_1 = __importDefault(require("./handler-loader"));
 class Scene {
     constructor(midiIn, toLaunchpad, sceneJson) {
-        this.xyButtons = [];
+        this.sceneName = '';
+        this.sceneIndex = 0;
+        this.handlers = [];
         this.midiIn = midiIn;
         this.toLaunchpad = toLaunchpad;
-        for (let row = 0; row < 8; row++) {
-            this.xyButtons[row] = [];
-            for (let col = 0; col < 8; col++) {
-                this.xyButtons[row][col] = new xy_button_1.default(midiIn, toLaunchpad, row, col, this);
-            }
-        }
-        this.loadSceneFromJson(sceneJson);
-    }
-    loadSceneFromJson(json) {
-        this.sceneName = json['sceneName'];
-        if (json['handlers'] !== undefined) {
-            if (json['handlers']['xyButtons']) {
-                json['handlers']['xyButtons'].forEach(buttonJson => {
-                    if (buttonJson['row'] === 'all') {
-                        if (buttonJson['col'] === 'all') {
-                            let behavior = buttonJson['mode'];
-                            // Default behavior mode is 'toggle', otherwise take from json
-                            let behaviorMode = button_behavior_mode_1.default.toggle;
-                            if (behavior['mode'] &&
-                                (behavior['mode'] === button_behavior_mode_1.default.toggle
-                                    || behavior['mode'] === button_behavior_mode_1.default.toggleRelease
-                                    || behavior['mode'] === button_behavior_mode_1.default.push
-                                    || behavior['mode'] === button_behavior_mode_1.default.hold
-                                    || behavior['mode'] === button_behavior_mode_1.default.holdRelease
-                                    || behavior['mode'] === button_behavior_mode_1.default.doubleTap)) {
-                                behaviorMode = behavior['mode'];
-                            }
-                            let jsonStages = buttonJson['stages'];
-                            [].concat(...this.xyButtons).forEach(btn => {
-                                btn.mode = behaviorMode;
-                                jsonStages.forEach(jsonStage => {
-                                    btn.addSceneStage(new scene_stage_1.default(jsonStage, btn.row, btn.col, this));
-                                });
-                            });
-                        }
-                    }
-                });
-            }
-        }
+        this.loadScene(sceneJson);
     }
     handleMidiEvent(msg) {
         let midiBytes = msg.split(' ').map(byteStr => parseInt(byteStr));
-        let event = midiBytes[0];
-        let rowCol = gn_lp_util_1.default.getRowCol(midiBytes[1]);
-        let row = rowCol[0];
-        let col = rowCol[1];
-        let vel = midiBytes[2];
-        // 144 is button grid (cols 0 - 7) and right-hand-side 'launch' buttons (col 8)
-        if (event === 144) {
-            // is it X-Y grid buttons ( < 8) or right-hand-side 'launch' buttons?
-            if (col < 8) {
-                this.handleXYBtnEvent(row, col, vel);
-            }
-            else {
-                this.handleLaunchBtnEvent(row, vel);
-            }
-        }
-        else if (event === 176) { // 176 is top-row menu and user buttons
-            col = col - 8;
-            this.handleMenuBtnEvent(col, vel);
+        let midiEvent = new midi_event_1.default(midiBytes, Date.now());
+        let handler = this.handlers.find(handler => handler.midiBytes[0] === midiBytes[0]
+            && handler.midiBytes[1] === midiBytes[1]);
+        if (handler !== undefined) {
+            handler.handleEvent(midiEvent);
         }
     }
-    handleXYBtnEvent(row, col, vel) {
-        this.xyButtons[row][col].handleNoteEvent(vel);
+    notify(handler) {
+        console.log('Notify...');
+        let msg = this.constructToLaunchpadMessage(handler);
+        this.toLaunchpad.send(msg);
+        this.sendSideEffects(handler);
     }
-    handleLaunchBtnEvent(row, vel) {
-        this.toLaunchpad.send('play: ' + row + ' ' + vel);
+    constructToLaunchpadMessage(handler) {
+        console.log('Handler: ' + handler);
+        console.log('Curhandlerstate: ' + handler.curHandlerState);
+        let msg = handler.midiBytes[0] + ' ' +
+            handler.midiBytes[1] + ' ' +
+            handler.curHandlerState.colorCode;
+        return msg;
     }
-    handleMenuBtnEvent(col, vel) {
-        this.toLaunchpad.send('menu: ' + col + ' ' + vel);
+    sendSideEffects(handler) {
+        let sideEffects = handler.curHandlerState.sideEffects;
+        sideEffects.forEach(sideEffect => {
+        });
+    }
+    loadScene(sceneJson) {
+        this.sceneName = sceneJson['sceneName'] !== undefined ? sceneJson['sceneName'] : this.sceneName;
+        this.sceneIndex = sceneJson['sceneIndex'] !== undefined ? sceneJson['sceneIndex'] : this.sceneIndex;
+        let handlerJsonArr = sceneJson['handlers'] !== undefined ? sceneJson['handlers'] : [];
+        handlerJsonArr.forEach(handlerJson => {
+            let handlers = handler_loader_1.default.loadHandlers(handlerJson);
+            handlers.forEach(handler => {
+                handler.subscribe(this);
+                this.handlers.push(handler);
+            });
+        });
     }
 }
 exports.default = Scene;
