@@ -1,5 +1,5 @@
 interface MidiOutDeviceInterface {
-    send(msg : string) : void;
+    send(msg: string): void;
 }
 
 export default MidiOutDeviceInterface;

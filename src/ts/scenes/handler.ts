@@ -7,24 +7,24 @@ import Scene from "./scene";
 
 class Handler {
 
-    type : HandlerType = null;
-    midiBytes : Array<number> = [];
-    handlerStates : Array<HandlerState> = [];
-    curHandlerState : HandlerState = null;
-    handlerEvents : Array<MidiEvent> = [];
+    type: HandlerType = null;
+    midiBytes: Array<number> = [];
+    handlerStates: Array<HandlerState> = [];
+    curHandlerState: HandlerState = null;
+    handlerEvents: Array<MidiEvent> = [];
     subscribers: Array<Scene> = [];
 
-    setType(type : HandlerType) {
+    setType(type: HandlerType) {
         this.type = type;
     }
 
-    setMidiBytes(midiBytes : Array<number>) {
+    setMidiBytes(midiBytes: Array<number>) {
         midiBytes.forEach((byte, i) => {
             this.midiBytes[i] = byte;
         });
     }
 
-    setHandlerStates(handlerStates : Array<HandlerState>) {
+    setHandlerStates(handlerStates: Array<HandlerState>) {
         this.handlerStates = [];
         handlerStates.forEach(handlerState => {
             this.handlerStates.push(handlerState);
@@ -37,13 +37,13 @@ class Handler {
         console.log('this.curHandlerState: ' + this.curHandlerState);
     }
 
-    subscribe(scene : Scene) {
+    subscribe(scene: Scene) {
         this.subscribers.push(scene);
     }
 
-    handleEvent(handlerEvent : MidiEvent) {
+    handleEvent(handlerEvent: MidiEvent) {
 
-        let handlerState : HandlerState = this.curHandlerState.clone();
+        let handlerState: HandlerState = this.curHandlerState.clone();
 
         if (handlerEvent.midiBytes[2] > 0) {
             // Publish push event
@@ -89,9 +89,9 @@ class Handler {
         }
     }
 
-    publishEvent(eventType : EventType, handlerState : HandlerState) {
+    publishEvent(eventType: EventType, handlerState: HandlerState) {
     
-        let nextHandlerStateIdx : number = handlerState.transitions.get(eventType);
+        let nextHandlerStateIdx: number = handlerState.transitions.get(eventType);
         console.log('nextHandlerStateIdx: ' + nextHandlerStateIdx);
         this.curHandlerState = this.handlerStates.find(hs => hs.index === nextHandlerStateIdx);
 
@@ -105,7 +105,7 @@ class Handler {
      * Transition the current event state to the next state 
      * according to the interaction type.
      */
-    doTransitionState(interaction : EventType) : HandlerState {
+    doTransitionState(interaction: EventType): HandlerState {
         let nextEventStateIdx = this.curHandlerState.getNextEventStateIndex(interaction);
         let nextEventState = this.handlerStates.find(eventState => eventState.index === nextEventStateIdx);
         this.curHandlerState = nextEventState;

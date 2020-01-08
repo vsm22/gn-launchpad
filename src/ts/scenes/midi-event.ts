@@ -1,8 +1,8 @@
 class MidiEvent {
-    midiBytes : Array<number> = [];
-    timestamp : number = 0;
+    midiBytes: Array<number> = [];
+    timestamp: number = 0;
 
-    constructor(midiBytes : Array<number>, timestamp : number) {
+    constructor(midiBytes: Array<number>, timestamp: number) {
         midiBytes.forEach((byte, i) => {
             this.midiBytes[i] = byte;
         });

@@ -2,21 +2,21 @@ import Util from '../gn-lp-util';
 
 class SideEffect {
     
-    midiBytes : Array<number> = [];
-    colorCode : number = null;
-    delay : number = null;
+    midiBytes: Array<number> = [];
+    colorCode: number = null;
+    delay: number = null;
 
-    setMidiBytes(midiBytes : Array<number>) {
+    setMidiBytes(midiBytes: Array<number>) {
         midiBytes.forEach((byte, i) => {
             this.midiBytes[i] = byte;
         });
     }
 
-    setColorCode(colorCode : number) {
+    setColorCode(colorCode: number) {
         this.colorCode = colorCode;
     }
 
-    setDelay(delay : number) {
+    setDelay(delay: number) {
         this.delay = delay;
     }
 }

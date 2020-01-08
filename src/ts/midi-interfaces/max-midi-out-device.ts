@@ -5,13 +5,13 @@ class MaxMidiOutDevice implements MidiOutDeviceInterface {
 
     prefix : string = '';
 
-    constructor(prefix : string) {
+    constructor(prefix: string) {
         if (prefix != undefined && prefix != null && prefix != '') {
             this.prefix = prefix;
         }
     }
 
-    send(msg : string) : void {
+    send(msg : string): void {
         Max.outlet(this.prefix + ' ' + msg);
     }
 }

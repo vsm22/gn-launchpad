@@ -14,11 +14,11 @@ class HandlerLoader {
      * definition. It may return an array of one, several, or many handlers
      * depedning on the row and col specification.
      */
-    static loadHandlers(handlerJson : object) : Array<Handler> {
+    static loadHandlers(handlerJson: object): Array<Handler> {
         
-        let handlers : Array<Handler> = [];
+        let handlers: Array<Handler> = [];
         
-        let type : HandlerType = HandlerType.midi;
+        let type: HandlerType = HandlerType.midi;
                     
         switch (handlerJson['type']) {
             case 'xyButton': type = HandlerType.xyButton; break;
@@ -77,10 +77,10 @@ class HandlerLoader {
         
         handlers.forEach(handler => {
 
-            let handlerStates : Array<HandlerState> = [];
+            let handlerStates: Array<HandlerState> = [];
 
             // We need to do this inside handler loop because side effects depend on the handler
-            let handlerStateJsonArr : Array<object> = handlerJson['handlerStates'] !== undefined ? handlerJson['handlerStates'] : [];
+            let handlerStateJsonArr: Array<object> = handlerJson['handlerStates'] !== undefined ? handlerJson['handlerStates'] : [];
             handlerStateJsonArr.forEach(handlerStateJson => {
                 let handlerState = HandlerLoader.loadHandlerState(handlerStateJson, handler);
                 handlerStates.push(handlerState);
@@ -92,7 +92,7 @@ class HandlerLoader {
         return handlers;
     }
 
-    static loadHandlerState(stateJson : object, handler : Handler) : HandlerState {
+    static loadHandlerState(stateJson: object, handler: Handler): HandlerState {
         let handlerState = new HandlerState();
 
         let index = stateJson['index'] !== undefined ? stateJson['index'] : 0;
@@ -114,9 +114,9 @@ class HandlerLoader {
         return handlerState;
     }
 
-    static loadTransitions(transitionsJson : Array<object>) : Map<EventType, number> {
+    static loadTransitions(transitionsJson: Array<object>): Map<EventType, number> {
 
-        let transitions : Map<EventType, number> = new Map();
+        let transitions: Map<EventType, number> = new Map();
         
         transitionsJson.forEach(transitionJson => {
 
@@ -135,7 +135,7 @@ class HandlerLoader {
                 default: break;
             }
 
-            let toIdx : number = transitionJson['toIndex'];
+            let toIdx: number = transitionJson['toIndex'];
         
             transitions.set(eventType, toIdx);
         });
@@ -146,9 +146,9 @@ class HandlerLoader {
         return transitions;
     }
 
-    static loadSideEffects(sideEffectsJsonArr : Array<object>, handler : Handler) : Array<SideEffect> {
+    static loadSideEffects(sideEffectsJsonArr: Array<object>, handler: Handler): Array<SideEffect> {
 
-        let sideEffects : Array<SideEffect> = [];
+        let sideEffects: Array<SideEffect> = [];
 
         sideEffectsJsonArr.forEach(sideEffectJson => {
 
@@ -159,7 +159,7 @@ class HandlerLoader {
             let colorCode = Util.parseColor(color);
             colorCode = sideEffectJson['colorCode'] !== undefined ? sideEffectJson['colorCode'] : colorCode;
     
-            let delay : number = sideEffectJson['delay'] !== undefined ? sideEffectJson['delay'] : 0;
+            let delay: number = sideEffectJson['delay'] !== undefined ? sideEffectJson['delay'] : 0;
             
             let rows = [];
             let cols = [];

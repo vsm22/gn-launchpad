@@ -5,15 +5,15 @@ import Scene from './scenes/scene';
 
 class GnLaunchpad {
 
-    midiIn : MidiInDeviceInterface;
+    midiIn: MidiInDeviceInterface;
     toLaunchpad: MidiOutDeviceInterface;
     midiOut: MidiOutDeviceInterface;
     textOut: MidiOutDeviceInterface;
-    scenes : Array<Scene> = [];
+    scenes: Array<Scene> = [];
     curSceneIdx = 0;
     
-    constructor(midiIn : MidiInDeviceInterface,
-                    toLaunchpad : MidiOutDeviceInterface,
+    constructor(midiIn: MidiInDeviceInterface,
+                    toLaunchpad: MidiOutDeviceInterface,
                     midiOut: MidiOutDeviceInterface,
                     textOut: MidiOutDeviceInterface,
                     configJsonPath: string) {
@@ -29,7 +29,7 @@ class GnLaunchpad {
         this.reset();
     }
 
-    loadScenes(filepath : string) {
+    loadScenes(filepath: string) {
         let configJson = require(filepath);
         if (configJson['scenes'] !== undefined) {
             configJson['scenes'].forEach(sceneJson => this.scenes.push(new Scene(this.midiIn, this.toLaunchpad, sceneJson)));
@@ -37,7 +37,7 @@ class GnLaunchpad {
         console.log('Cursceneidx: ' + this.curSceneIdx);
     } 
 
-    handleMidiMessage(msg : string) {
+    handleMidiMessage(msg: string) {
         this.scenes[this.curSceneIdx].handleMidiEvent(msg);
     }
 

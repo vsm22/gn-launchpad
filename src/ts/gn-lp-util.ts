@@ -1,6 +1,6 @@
 class GnLpUtil {
 
-    static launchpadConfig : object = (function() : object {
+    static launchpadConfig: object = (function() : object {
         return require('./config/launchpad_config.json');
     }());
 
@@ -10,7 +10,7 @@ class GnLpUtil {
      * stored by row, col, and mapped to the first two MIDI bytes of the corresponding message.
      * The resultant map is key string contructed from 'row' + 'col', value array of bytes
      */
-    static xyButtonMap : Map<string, Array<number>> = (function() : Map<string, Array<number>> {
+    static xyButtonMap: Map<string, Array<number>> = (function(): Map<string, Array<number>> {
         let xyButtonMap = new Map();
         let xyButtonMapJson = require('./config/xy_button_map.json');
         for (let row = 0; row < 8; row++) {
@@ -38,7 +38,7 @@ class GnLpUtil {
         'green-flash': 56
     }
 
-    static getXYButton(row : number, col : number) {
+    static getXYButton(row: number, col: number) {
         return (row * 16) + col;
     }
 
@@ -46,9 +46,9 @@ class GnLpUtil {
      * Get row and col of button for given midi pitch number
      * @param midiPitch
      */
-    static getRowCol(midiPitch : number) : Array<number> {
+    static getRowCol(midiPitch: number): Array<number> {
 
-        let rowcol : Array<number>;
+        let rowcol: Array<number>;
 
         let row = Math.floor(midiPitch / 16); 
         let col = midiPitch % 16;
@@ -57,7 +57,7 @@ class GnLpUtil {
         return rowcol;
     }
 
-    static parseColor(colorName : string) : number {
+    static parseColor(colorName: string): number {
         return this.colors[colorName];
     }
 
@@ -66,7 +66,7 @@ class GnLpUtil {
      * @param row 
      * @param col 
      */
-    static getXYButtonMidiBytes(row : number, col : number) : Array<number> {
+    static getXYButtonMidiBytes(row: number, col: number): Array<number> {
         let midiBytes = this.xyButtonMap.get(row + ' ' + col);
         return midiBytes;
     }
@@ -76,11 +76,11 @@ class GnLpUtil {
      * @param byte0
      * @param byte1
      */
-    static getXYButtonRowColFromMidiBytes(byte0 : number, byte1 : number) : Array<number> {
-        let xyArr : Array<number> = [];
-        this.xyButtonMap.forEach((val : Array<number>, key : string) => {
+    static getXYButtonRowColFromMidiBytes(byte0: number, byte1: number): Array<number> {
+        let xyArr: Array<number> = [];
+        this.xyButtonMap.forEach((val: Array<number>, key: string) => {
             if (val[0] === byte0 && val[1] === byte1) {
-                let rowColStrArr : Array<string> = key.split(' ');
+                let rowColStrArr: Array<string> = key.split(' ');
                 xyArr[0] = parseInt(rowColStrArr[0]);
                 xyArr[1] = parseInt(rowColStrArr[1]);
             }
