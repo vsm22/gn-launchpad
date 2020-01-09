@@ -16,6 +16,7 @@
     "typescript": "^3.7.3"
   },
   "dependencies": {
-    "@types/node": "^12.12.21"
+    "@types/node": "^12.12.21",
+    "@types/webmidi": "^2.0.4"
   }
 }
