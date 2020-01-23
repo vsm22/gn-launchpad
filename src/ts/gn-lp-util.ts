@@ -1,7 +1,7 @@
 class GnLpUtil {
 
     static launchpadConfig: object = (function() : object {
-        return require('./config/launchpad_config.json');
+        return require('../config/launchpad_config.json');
     }());
 
     /** 
@@ -12,7 +12,7 @@ class GnLpUtil {
      */
     static xyButtonMap: Map<string, Array<number>> = (function(): Map<string, Array<number>> {
         let xyButtonMap = new Map();
-        let xyButtonMapJson = require('./config/xy_button_map.json');
+        let xyButtonMapJson = require('../config/xy_button_map.json');
         for (let row = 0; row < 8; row++) {
             let rowJson = xyButtonMapJson['' + row];
             for (let col = 0; col < 8; col++) {

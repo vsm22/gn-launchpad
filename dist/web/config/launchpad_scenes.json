@@ -1,0 +1,33 @@
+{
+    "scenes": [{
+        "sceneName": "toggler",
+        "sceneIndex": 0,
+        "handlers": [{
+            "type": "xyButton",
+            "row": "all",
+            "col": "all",
+            "handlerStates": [{
+                "index": 0,
+                "color": "off",
+                "transitions": [{
+                    "eventType": "push",
+                    "toIndex": 1
+                }]
+            },
+            {
+                "index": 1,
+                "color": "red",
+                "transitions": [{
+                    "eventType": "push",
+                    "toIndex": 0
+                }],
+                "sideEffects": [{
+                    "row": "same",
+                    "col": "all",
+                    "color": "off"
+                }]
+            }]
+        }]
+        
+    }]
+}

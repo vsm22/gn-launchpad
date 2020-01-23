@@ -1,7 +1,10 @@
 const path = require('path');
 
 module.exports = {
-  entry: './src/ts/gn-launchpad-web.ts',
+  entry: {
+    'max/lp-max-bundle': './src/ts/gn-launchpad-max.ts',
+    'web/lp-web-bundle': './src/ts/gn-launchpad-web.ts'
+  },
   module: {
     rules: [
       {
@@ -12,13 +15,14 @@ module.exports = {
     ],
   },
   resolve: {
-    extensions: [ '.tsx', '.ts', '.js' ],
+    extensions: [ '.tsx', '.ts', '.js' ]
   },
   externals: {
-    'max-api': 'max-api'
+    'max-api': 'commonjs max-api'
   },
   output: {
-    filename: 'web-bundle.js',
+    filename: '[name].js',
     path: path.resolve(__dirname, 'dist'),
   },
+  target: 'node'
 };
