@@ -5,7 +5,7 @@
       "target": "es6",
       "moduleResolution": "node",
       "sourceMap": true,
-      "outDir": "dist",
+      "outDir": "dist/tsc",
       "baseUrl": ".",
       "paths": {
           "max-api": ["/Applications/Max.app/Contents/Resources/C74/packages/Node For Max/source/lib/exposed/max-api"]
@@ -13,9 +13,10 @@
     },
     "lib": ["es2015"],
     "include": [
+        "src/config/*",
         "src/ts/*",
         "src/ts/midi-interfaces/*",
-        "/Users/Shared/Max 8/Library", "src/ts/buttons/xy-button.ts", "src/ts/buttons/button-behavior-mode.ts", "src/ts/buttons/button-behavior.ts",
+        "/Users/Shared/Max 8/Library"
     ],
     "exclude": [
         "node_modules",

@@ -1,7 +1,7 @@
 class GnLpUtil {
 
     static launchpadConfig: object = (function() : object {
-        return require('../config/launchpad_config.json');
+        return require('./config/launchpad_config.json');
     }());
 
     /** 

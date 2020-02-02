@@ -5,7 +5,8 @@
   "main": "gn-launchpad.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rm -rf dist/* && npm run webpack && cp src/max/gn-launchpad.maxpat dist/max && mkdir -p dist/max/config && cp src/config/* dist/max/config && mkdir -p dist/web/config && cp src/config/* dist/web/config",
+    "build": "rm -rf dist/max/* && rm -rf dist/web/* && npm run webpack && cp src/max/gn-launchpad.maxpat dist/max && mkdir -p dist/max/config && cp src/config/* dist/max/config && mkdir -p dist/web/config && cp src/config/* dist/web/config",
+    "tsc": "rm -rf dist/tsc/* && tsc && mkdir dist/tsc/config && cp src/config/* dist/tsc/config",
     "webpack": "webpack",
     "watch": "tsc --watch"
   },
