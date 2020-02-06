@@ -9,7 +9,8 @@
       "baseUrl": ".",
       "paths": {
           "max-api": ["/Applications/Max.app/Contents/Resources/C74/packages/Node For Max/source/lib/exposed/max-api"]
-      }
+      },
+      "experimentalDecorators": true
     },
     "lib": ["es2015"],
     "include": [
@@ -23,4 +24,4 @@
         "**/*.spec.ts"
     ],
     "types": ["webmidi"]
-  }
+}

@@ -6,17 +6,26 @@
  */
 abstract class GNLPLoader {
 
-    launchpadConfig: object;
-    launchpadScenes: object;
-    xyButtonMap: object;
-    eventMap: object;
+    static launchpadConfig: object;
+    static launchpadScenes: object;
+    static xyButtonMap: Map<string, Array<number>>;
+    static eventMap: object;
 
     constructor() {
-        this.launchpadConfig = this.loadLaunchpadConfig();
+        GNLPLoader.launchpadConfig = this.loadLaunchpadConfig();
+        GNLPLoader.xyButtonMap = this.loadXYButtonMap();
+        GNLPLoader.launchpadScenes = this.loadLaunchpadScenes();
     }
 
     /**
      * Load the main config file.
+     * 
+     * Possible properties:
+     * {
+     *  // File path to the scenes config json file
+     *  launchpadScenesJsonPath:
+     * 
+     * }
      * 
      * @return - Object representing the JSON configuration.
      */
@@ -30,11 +39,15 @@ abstract class GNLPLoader {
     abstract loadLaunchpadScenes(): object;
 
     /**
-     * Load the XY button map. 
+     /** 
+     * Load and keep a map of MIDI bytes that correspond to each XY Button. 
+     * The map is loaded from a JSON file called xy_button_map.json, where the mappings are 
+     * stored by row, col, and mapped to the first two MIDI bytes of the corresponding message.
+     * The resultant map is key string contructed from 'row' + 'col', value array of bytes
      * 
      * @return - Object representing the XY Button map.
      */
-    abstract loadXYButtonMap(): object;
+    abstract loadXYButtonMap(): Map<string, Array<number>>;
 
     /**
      * Load the event map.

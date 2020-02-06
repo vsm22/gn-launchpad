@@ -2,8 +2,7 @@ import MidiInDeviceInterface from './midi-interfaces/midi-in-device-interface';
 import MidiOutDeviceInterface from './midi-interfaces/midi-out-device-interface';
 import OutputCodes from './output-codes';
 import Scene from './scenes/scene';
-import { pathToFileURL } from 'url';
-var fs = require('file-system');
+import GNLPLoader from './gn-lp-loader';
 
 class GnLaunchpad {
 
@@ -17,32 +16,19 @@ class GnLaunchpad {
     constructor(midiIn: MidiInDeviceInterface,
                     toLaunchpad: MidiOutDeviceInterface,
                     midiOut: MidiOutDeviceInterface,
-                    textOut: MidiOutDeviceInterface,
-                    configJsonPath: string) {
+                    textOut: MidiOutDeviceInterface) {
 
         this.midiIn = midiIn;
         this.toLaunchpad = toLaunchpad;
         this.midiOut = midiOut;
         this.textOut = textOut;
-        configJsonPath = (configJsonPath != undefined && configJsonPath != null && configJsonPath != '') ?
-            configJsonPath : 'launchpad_scenes.json';
 
-        console.log(__dirname);
-        this.loadScenes(configJsonPath);
+        this.loadScenes();
         this.reset();
     }
 
-    loadScenes(filepath: string) {
-        let configJson : object;
-
-        fs.readFile(filepath, (err, data) => {
-            if (err) {
-                console.log('Error reading ' + filepath);
-            } else {
-                configJson = JSON.parse(data.toString());
-                this.parseSceneJson(configJson);
-            }
-        });
+    loadScenes() {
+        GNLPLoader.launchpadScenes['scenes'].forEach(sceneJson => this.scenes.push(new Scene(this.midiIn, this.toLaunchpad, sceneJson)));
     }
 
     parseSceneJson(configJson: object) {

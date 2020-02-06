@@ -4,6 +4,7 @@ import EventType from "./event-type";
 import MidiEvent from "./midi-event";
 import Util from "../gn-lp-util";
 import Scene from "./scene";
+import GNLPLoader from "../gn-lp-loader";
 
 class Handler {
 
@@ -51,7 +52,7 @@ class Handler {
 
             // If there was another push event within double-tap threshold time, publish double tap event
             if (this.handlerEvents[1].midiBytes[2] > 0
-                    && handlerEvent.timestamp - this.handlerEvents[1].timestamp > Util.launchpadConfig["doubleTapTime"]) {
+                    && handlerEvent.timestamp - this.handlerEvents[1].timestamp > GNLPLoader.launchpadConfig["doubleTapTime"]) {
                 this.publishEvent(EventType.doubleTap, handlerState);
             }
 
@@ -60,25 +61,25 @@ class Handler {
                 if (this.handlerEvents[0].midiBytes[2] > 0) {
                     this.publishEvent(EventType.hold, handlerState);
                 }
-            }, Util.launchpadConfig["holdTime"]);
+            }, GNLPLoader.launchpadConfig["holdTime"]);
 
             // If release event has not been published, publish long hold event after timeout
             setTimeout(() => {
                 if (this.handlerEvents[0].midiBytes[2] > 0) {
                     this.publishEvent(EventType.longHold, handlerState);
                 }
-            }, Util.launchpadConfig["longHoldTime"]);
+            }, GNLPLoader.launchpadConfig["longHoldTime"]);
         } else {
             // Publish release event
             this.publishEvent(EventType.release, handlerState);
 
             if (this.handlerEvents[0].midiBytes[2] > 0 
-                && handlerEvent.timestamp - this.handlerEvents[0].timestamp > Util.launchpadConfig["holdTime"]) {
+                && handlerEvent.timestamp - this.handlerEvents[0].timestamp > GNLPLoader.launchpadConfig["holdTime"]) {
                 this.publishEvent(EventType.holdRelease, handlerState);
             }
 
             if (this.handlerEvents[0].midiBytes[2] > 0 
-                && handlerEvent.timestamp - this.handlerEvents[0].timestamp > Util.launchpadConfig["longHoldTime"]) {
+                && handlerEvent.timestamp - this.handlerEvents[0].timestamp > GNLPLoader.launchpadConfig["longHoldTime"]) {
                 this.publishEvent(EventType.longHoldRelease, handlerState);
             }
         }

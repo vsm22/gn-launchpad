@@ -7,4 +7,4 @@ const toLaunchpad = new WebMidiOutDevice('');
 const midiOutDevice = new WebMidiOutDevice('');
 const textOutDevice = new WebMidiOutDevice('');
 
-const launchpad = new Launchpad(midiInDevice, toLaunchpad, midiOutDevice, textOutDevice, '');
+const launchpad = new Launchpad(midiInDevice, toLaunchpad, midiOutDevice, textOutDevice);
