@@ -17,7 +17,7 @@
         "src/config/*",
         "src/ts/*",
         "src/ts/midi-interfaces/*",
-        "/Users/Shared/Max 8/Library"
+        "/Users/Shared/Max 8/Library", "src/ts/util/output-codes.ts", "src/ts/util/gn-lp-util.ts", "src/ts/core/gn-lp-loader.ts", "src/ts/core/gn-launchpad.ts"
     ],
     "exclude": [
         "node_modules",

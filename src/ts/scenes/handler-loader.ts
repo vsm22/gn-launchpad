@@ -2,7 +2,7 @@ import Handler from './handler';
 import HandlerType from './handler-type';
 import HandlerState from './handler-state';
 
-import Util from '../gn-lp-util';
+import Util from '../util/gn-lp-util';
 import EventType from './event-type';
 import SideEffect from './side-effect';
 

@@ -2,9 +2,9 @@ import HandlerType from "./handler-type";
 import HandlerState from "./handler-state";
 import EventType from "./event-type";
 import MidiEvent from "./midi-event";
-import Util from "../gn-lp-util";
+import Util from "../util/gn-lp-util";
 import Scene from "./scene";
-import GNLPLoader from "../gn-lp-loader";
+import GNLPLoader from "../core/gn-lp-loader";
 
 class Handler {
 

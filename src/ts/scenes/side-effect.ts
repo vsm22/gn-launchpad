@@ -1,4 +1,4 @@
-import Util from '../gn-lp-util';
+import Util from '../util/gn-lp-util';
 
 class SideEffect {
     

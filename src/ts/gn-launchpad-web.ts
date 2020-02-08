@@ -1,4 +1,4 @@
-import Launchpad from './gn-launchpad';
+import Launchpad from './core/gn-launchpad';
 import WebMidiOutDevice from './midi-interfaces/max-midi-out-device';
 import WebMidiInDevice from './midi-interfaces/max-midi-in-device';
 

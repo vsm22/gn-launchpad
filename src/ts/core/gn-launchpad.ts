@@ -1,7 +1,7 @@
-import MidiInDeviceInterface from './midi-interfaces/midi-in-device-interface';
-import MidiOutDeviceInterface from './midi-interfaces/midi-out-device-interface';
-import OutputCodes from './output-codes';
-import Scene from './scenes/scene';
+import MidiInDeviceInterface from '../midi-interfaces/midi-in-device-interface';
+import MidiOutDeviceInterface from '../midi-interfaces/midi-out-device-interface';
+import OutputCodes from '../util/output-codes';
+import Scene from '../scenes/scene';
 import GNLPLoader from './gn-lp-loader';
 
 class GnLaunchpad {

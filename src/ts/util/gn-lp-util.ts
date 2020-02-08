@@ -1,5 +1,4 @@
-import GNLPUtil from "./gn-lp-util";
-import GNLPLoader from "./gn-lp-loader";
+import GNLPLoader from "../core/gn-lp-loader";
 
 class GnLpUtil {
 
