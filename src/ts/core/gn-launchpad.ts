@@ -35,10 +35,13 @@ class GnLaunchpad {
         if (configJson['scenes'] !== undefined) {
             configJson['scenes'].forEach(sceneJson => this.scenes.push(new Scene(this.midiIn, this.toLaunchpad, sceneJson)));
         }
-        console.log('Cursceneidx: ' + this.curSceneIdx);
     }
 
     handleMidiMessage(msg: string) {
+        console.log("handleMidiMessage | msg=>" + msg);
+        console.log("handleMidiMessage | this.curSceneIdx=>" + this.curSceneIdx);
+        console.log("handleMidiMessage | this.scenes[this.curSceneIdx]=>" + this.scenes[this.curSceneIdx]);
+
         this.scenes[this.curSceneIdx].handleMidiEvent(msg);
     }
 

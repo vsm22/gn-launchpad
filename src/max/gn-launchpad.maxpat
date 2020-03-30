@@ -10,7 +10,7 @@
 		}
 ,
 		"classnamespace" : "box",
-		"rect" : [ 34.0, 79.0, 1071.0, 787.0 ],
+		"rect" : [ 1630.0, -207.0, 1431.0, 854.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 0,
 		"default_fontsize" : 12.0,
@@ -40,23 +40,42 @@
 		"boxes" : [ 			{
 				"box" : 				{
 					"id" : "obj-9",
-					"maxclass" : "newobj",
+					"maxclass" : "number",
 					"numinlets" : 1,
-					"numoutlets" : 0,
-					"patching_rect" : [ 691.0, 414.0, 32.0, 22.0 ],
-					"text" : "print"
+					"numoutlets" : 2,
+					"outlettype" : [ "", "bang" ],
+					"parameter_enable" : 0,
+					"patching_rect" : [ 234.0, 323.0, 50.0, 22.0 ]
 				}
 
 			}
 , 			{
 				"box" : 				{
 					"id" : "obj-2",
-					"maxclass" : "message",
+					"maxclass" : "newobj",
+					"numinlets" : 1,
+					"numoutlets" : 2,
+					"outlettype" : [ "", "" ],
+					"patching_rect" : [ 379.0, 409.0, 215.0, 22.0 ],
+					"saved_object_attributes" : 					{
+						"autostart" : 0,
+						"defer" : 0,
+						"watch" : 1
+					}
+,
+					"text" : "node.script lp-max-bundle.js @watch 1"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-1",
+					"maxclass" : "newobj",
 					"numinlets" : 2,
-					"numoutlets" : 1,
-					"outlettype" : [ "" ],
-					"patching_rect" : [ 881.0, 311.0, 50.0, 22.0 ],
-					"text" : "0"
+					"numoutlets" : 3,
+					"outlettype" : [ "", "", "" ],
+					"patching_rect" : [ 311.0, 354.0, 42.0, 22.0 ],
+					"text" : "gate 3"
 				}
 
 			}
@@ -91,7 +110,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 152.0, 167.0, 57.0, 22.0 ],
+					"patching_rect" : [ 334.0, 160.0, 57.0, 22.0 ],
 					"text" : "tosymbol"
 				}
 
@@ -103,7 +122,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 152.0, 143.0, 62.0, 22.0 ],
+					"patching_rect" : [ 334.0, 136.0, 62.0, 22.0 ],
 					"text" : "144 0 127"
 				}
 
@@ -115,7 +134,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 152.0, 191.0, 142.0, 22.0 ],
+					"patching_rect" : [ 334.0, 184.0, 142.0, 22.0 ],
 					"text" : "prepend from_launchpad"
 				}
 
@@ -127,7 +146,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 684.0, 302.0, 57.0, 22.0 ],
+					"patching_rect" : [ 689.0, 236.0, 57.0, 22.0 ],
 					"text" : "tosymbol"
 				}
 
@@ -139,7 +158,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 2,
 					"outlettype" : [ "", "" ],
-					"patching_rect" : [ 684.0, 278.0, 91.0, 22.0 ],
+					"patching_rect" : [ 689.0, 212.0, 91.0, 22.0 ],
 					"text" : "route midievent"
 				}
 
@@ -151,7 +170,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 8,
 					"outlettype" : [ "", "", "", "int", "int", "", "int", "" ],
-					"patching_rect" : [ 610.0, 254.0, 92.5, 22.0 ],
+					"patching_rect" : [ 615.0, 188.0, 92.5, 22.0 ],
 					"text" : "midiparse"
 				}
 
@@ -163,7 +182,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 684.0, 326.0, 142.0, 22.0 ],
+					"patching_rect" : [ 689.0, 260.0, 142.0, 22.0 ],
 					"text" : "prepend from_launchpad"
 				}
 
@@ -176,7 +195,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 769.0, 151.0, 268.0, 22.0 ]
+					"patching_rect" : [ 708.0, 86.0, 268.0, 22.0 ]
 				}
 
 			}
@@ -187,7 +206,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 675.0, 151.0, 92.0, 22.0 ],
+					"patching_rect" : [ 614.0, 86.0, 92.0, 22.0 ],
 					"text" : "port Launchpad"
 				}
 
@@ -199,7 +218,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "int" ],
-					"patching_rect" : [ 769.0, 223.0, 40.0, 22.0 ],
+					"patching_rect" : [ 615.0, 148.0, 40.0, 22.0 ],
 					"text" : "midiin"
 				}
 
@@ -211,7 +230,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 180.0, 340.0, 95.0, 22.0 ],
+					"patching_rect" : [ 363.0, 287.0, 95.0, 22.0 ],
 					"text" : "from_launchpad"
 				}
 
@@ -281,7 +300,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 125.0, 426.0, 71.0, 22.0 ],
+					"patching_rect" : [ 125.0, 449.0, 71.0, 22.0 ],
 					"text" : "fromsymbol"
 				}
 
@@ -313,7 +332,7 @@
 					"numoutlets" : 1,
 					"offset" : [ 0.0, 0.0 ],
 					"outlettype" : [ "bang" ],
-					"patching_rect" : [ 426.0, 477.0, 400.0, 220.0 ],
+					"patching_rect" : [ 435.0, 519.0, 861.0, 427.0 ],
 					"viewvisibility" : 1
 				}
 
@@ -325,7 +344,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 67.0, 350.0, 63.0, 22.0 ],
+					"patching_rect" : [ 232.5, 248.0, 63.0, 22.0 ],
 					"text" : "script stop"
 				}
 
@@ -338,7 +357,7 @@
 					"numoutlets" : 1,
 					"outlettype" : [ "bang" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 125.0, 144.0, 24.0, 24.0 ]
+					"patching_rect" : [ 307.0, 137.0, 24.0, 24.0 ]
 				}
 
 			}
@@ -349,7 +368,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 67.0, 326.0, 64.0, 22.0 ],
+					"patching_rect" : [ 232.5, 224.0, 64.0, 22.0 ],
 					"text" : "script start"
 				}
 
@@ -361,12 +380,10 @@
 					"numinlets" : 1,
 					"numoutlets" : 2,
 					"outlettype" : [ "", "" ],
-					"patching_rect" : [ 125.0, 396.0, 239.0, 22.0 ],
+					"patching_rect" : [ 125.0, 409.0, 239.0, 22.0 ],
 					"saved_object_attributes" : 					{
 						"autostart" : 0,
 						"defer" : 0,
-						"node_bin_path" : "",
-						"npm_bin_path" : "",
 						"watch" : 1
 					}
 ,
@@ -377,6 +394,20 @@
  ],
 		"lines" : [ 			{
 				"patchline" : 				{
+					"destination" : [ "obj-2", 0 ],
+					"source" : [ "obj-1", 1 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-8", 0 ],
+					"source" : [ "obj-1", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
 					"destination" : [ "obj-5", 0 ],
 					"source" : [ "obj-10", 0 ]
 				}
@@ -384,23 +415,14 @@
 			}
 , 			{
 				"patchline" : 				{
-					"destination" : [ "obj-8", 0 ],
-					"order" : 1,
+					"destination" : [ "obj-1", 1 ],
 					"source" : [ "obj-11", 0 ]
 				}
 
 			}
 , 			{
 				"patchline" : 				{
-					"destination" : [ "obj-9", 0 ],
-					"order" : 0,
-					"source" : [ "obj-11", 0 ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
-					"destination" : [ "obj-8", 0 ],
+					"destination" : [ "obj-1", 1 ],
 					"source" : [ "obj-12", 0 ]
 				}
 
@@ -414,15 +436,29 @@
 			}
 , 			{
 				"patchline" : 				{
-					"destination" : [ "obj-8", 0 ],
+					"destination" : [ "obj-1", 1 ],
 					"source" : [ "obj-14", 0 ]
 				}
 
 			}
 , 			{
 				"patchline" : 				{
-					"destination" : [ "obj-8", 0 ],
+					"destination" : [ "obj-1", 1 ],
 					"source" : [ "obj-16", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-19", 0 ],
+					"source" : [ "obj-2", 1 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-25", 0 ],
+					"source" : [ "obj-2", 0 ]
 				}
 
 			}
@@ -493,7 +529,7 @@
 			}
 , 			{
 				"patchline" : 				{
-					"destination" : [ "obj-8", 0 ],
+					"destination" : [ "obj-1", 1 ],
 					"source" : [ "obj-4", 0 ]
 				}
 
@@ -507,23 +543,14 @@
 			}
 , 			{
 				"patchline" : 				{
-					"destination" : [ "obj-8", 0 ],
+					"destination" : [ "obj-1", 1 ],
 					"source" : [ "obj-48", 0 ]
 				}
 
 			}
 , 			{
 				"patchline" : 				{
-					"destination" : [ "obj-2", 1 ],
-					"order" : 0,
-					"source" : [ "obj-5", 0 ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
 					"destination" : [ "obj-20", 0 ],
-					"order" : 1,
 					"source" : [ "obj-5", 0 ]
 				}
 
@@ -552,7 +579,7 @@
 , 			{
 				"patchline" : 				{
 					"destination" : [ "obj-19", 0 ],
-					"midpoints" : [ 354.5, 423.0, 435.5, 423.0 ],
+					"midpoints" : [ 354.5, 506.0, 444.5, 506.0 ],
 					"source" : [ "obj-8", 1 ]
 				}
 
@@ -564,11 +591,18 @@
 				}
 
 			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-1", 0 ],
+					"source" : [ "obj-9", 0 ]
+				}
+
+			}
  ],
 		"dependency_cache" : [ 			{
 				"name" : "gn-launchpad-max.js",
-				"bootpath" : "~/Documents/Max 8/Tools/gn-launchpad/dist",
-				"patcherrelativepath" : "../../dist",
+				"bootpath" : "~/Documents/Max 8/Tools/gn-launchpad/dist/tsc",
+				"patcherrelativepath" : "../../dist/tsc",
 				"type" : "TEXT",
 				"implicit" : 1
 			}
@@ -587,6 +621,13 @@
 , 			{
 				"name" : "fit_jweb_to_bounds.js",
 				"bootpath" : "C74:/packages/Node For Max/patchers/debug-monitor",
+				"type" : "TEXT",
+				"implicit" : 1
+			}
+, 			{
+				"name" : "lp-max-bundle.js",
+				"bootpath" : "~/Documents/Max 8/Tools/gn-launchpad/dist/max",
+				"patcherrelativepath" : "../../dist/max",
 				"type" : "TEXT",
 				"implicit" : 1
 			}

@@ -35,15 +35,12 @@ class Scene {
     }
 
     notify(handler: Handler) {
-        console.log('Notify...');
         let msg: string = this.constructToLaunchpadMessage(handler);
         this.toLaunchpad.send(msg);
         this.sendSideEffects(handler);
     }
 
     constructToLaunchpadMessage(handler: Handler) {
-        console.log('Handler: ' + handler);
-        console.log('Curhandlerstate: ' + handler.curHandlerState);
 
         let msg: string = handler.midiBytes[0] + ' ' +
             handler.midiBytes[1] + ' ' +

@@ -31,58 +31,27 @@ class HandlerLoader {
         // Create appropriate number of handlers and set the midi bytes
         if (type === HandlerType.xyButton) {
 
-            let rowJson = handlerJson['row'] !== undefined ? handlerJson['row'] : 'all';
-            let colJson = handlerJson['col'] !== undefined ? handlerJson['col'] : 'all';
+            handlers = HandlerLoader.createXYButtonHandlers(handlerJson);
 
-            let rows : Array<number> = [];
-            let cols : Array<number> = [];
-
-            if (typeof rowJson === 'number') {
-                rows.push(rowJson);
-            }
-
-            if (typeof colJson === 'number') {
-                cols.push(colJson);
-            }
-
-            if (rowJson === 'all') {
-                for (let r = 0; r < 8; r++) {
-                    rows.push(r);
-                }
-            }
-
-            if (colJson === 'all') {
-                for (let c = 0; c < 8; c++) {
-                    cols.push(c);
-                }
-            }
-
-            rows.forEach(row => {
-                cols.forEach(col => {
-                    let buttonMidiBytes : Array<number> = Util.getXYButtonMidiBytes(row, col);
-                    let handler : Handler = new Handler();
-                    handler.setMidiBytes(buttonMidiBytes);
-                    handlers.push(handler);
-                })
-            });
- 
         } else if (type === HandlerType.launchButton) {
-
+            // TODO: create launchButton handlers
         } else if (type === HandlerType.menuButton) {
-
+            // TODO: create launchButton handlers
         } else {
-
+            // TODO: create launchButton handlers
         }
 
         
         handlers.forEach(handler => {
 
+            handler.setType(type);
+
             let handlerStates: Array<HandlerState> = [];
 
             // We need to do this inside handler loop because side effects depend on the handler
             let handlerStateJsonArr: Array<object> = handlerJson['handlerStates'] !== undefined ? handlerJson['handlerStates'] : [];
-            handlerStateJsonArr.forEach(handlerStateJson => {
-                let handlerState = HandlerLoader.loadHandlerState(handlerStateJson, handler);
+            handlerStateJsonArr.forEach((handlerStateJson, idx) => {
+                let handlerState = HandlerLoader.loadHandlerState(handlerStateJson, handler, idx);
                 handlerStates.push(handlerState);
             });
             
@@ -92,10 +61,76 @@ class HandlerLoader {
         return handlers;
     }
 
-    static loadHandlerState(stateJson: object, handler: Handler): HandlerState {
+    /**
+     * Create XY-Button handlers from handlerJson.
+     * XY-buttons are the 16 main buttons in the center of the controller.
+     * Depending on the 'row' and 'col' specification in the handlerJson,
+     * different numbers of handlers may be returned. For example, if 'row' and
+     * 'col' are both specific numbers, then only 1 handler will be returned for 
+     * that specific row and col. If 'row' is a specific number, but 'col' is 'all',
+     * then 8 handlers will be returned for each XY-Button in that specific row.
+     * If 'row' and 'col' are both 'all', then 16 handlers will be returned for
+     * the all 16 buttons.
+     *
+     * @param handlerJson
+     * @returns Array of handlers. The specific number of handlers returned depends 
+     *          on the row and column
+     */
+    static createXYButtonHandlers(handlerJson: object): Array<Handler> {
+
+        let handlers: Array<Handler> = [];
+
+        let rowJson = handlerJson['row'] !== undefined ? handlerJson['row'] : 'all';
+        let colJson = handlerJson['col'] !== undefined ? handlerJson['col'] : 'all';
+
+        let rows : Array<number> = [];
+        let cols : Array<number> = [];
+
+        if (typeof rowJson === 'number') {
+            rows.push(rowJson);
+        }
+
+        if (typeof colJson === 'number') {
+            cols.push(colJson);
+        }
+
+        if (rowJson === 'all') {
+            for (let r = 0; r < 8; r++) {
+                rows.push(r);
+            }
+        }
+
+        if (colJson === 'all') {
+            for (let c = 0; c < 8; c++) {
+                cols.push(c);
+            }
+        }
+
+        rows.forEach(row => {
+            cols.forEach(col => {
+                let buttonMidiBytes : Array<number> = Util.getXYButtonMidiBytes(row, col);
+                let handler : Handler = new Handler();
+                handler.setMidiBytes(buttonMidiBytes);
+                handlers.push(handler);
+            })
+        });
+
+        return handlers;
+    }
+
+    /**
+     * Load a single HandlerState. A HandlerState represents a particular state of a handler,
+     * including it's current color, index, transitions, and sideEffects.
+     * 
+     * @param stateJson 
+     * @param handler 
+     * @param defaultIdx 
+     */
+    static loadHandlerState(stateJson: object, handler: Handler, defaultIdx: number): HandlerState {
+
         let handlerState = new HandlerState();
 
-        let index = stateJson['index'] !== undefined ? stateJson['index'] : 0;
+        let index = stateJson['index'] !== undefined ? stateJson['index'] : defaultIdx;
         handlerState.setIndex(index);
 
         let color = stateJson['color'] !== undefined ? stateJson['color'] : 'off';
@@ -114,14 +149,24 @@ class HandlerLoader {
         return handlerState;
     }
 
+    /**
+     * Load the transitions for a given handlerState. A transition specifies which handlerState index
+     * to transition the handler to in response to a given event. The returned map of transitions has 
+     * keys defined as eventTypes (i.e 'push', 'release', 'hold' etc.) and values defined as indexes
+     * of handlerState to transition to in response to the given event.
+     * 
+     * @param transitionsJson
+     * @return - Map of [eventType: handlerStateIndex] where eventType is the type of event that triggers
+     * a given transition, and handlerStateIndex is the index of the handlerState to transition to.
+     */
     static loadTransitions(transitionsJson: Array<object>): Map<EventType, number> {
 
         let transitions: Map<EventType, number> = new Map();
         
         transitionsJson.forEach(transitionJson => {
 
-            let eventTypeStr = transitionJson['eventType'] !== undefined ? transitionsJson['interaction'] : 'midiEvent';
-            let eventType : EventType = EventType.midiEvent;
+            let eventTypeStr = transitionJson['eventType'] !== undefined ? transitionJson['eventType'] : 'midiEvent';
+            let eventType: EventType = EventType.midiEvent;
             
             switch (eventTypeStr) {
                 case 'push': eventType = EventType.push; break;
@@ -140,12 +185,17 @@ class HandlerLoader {
             transitions.set(eventType, toIdx);
         });
 
-        transitions.forEach((val, key) => {
-            console.log('transition: ' + key + ' ' + val);
-        });
         return transitions;
     }
 
+    /**
+     * Load side effects. Side effects are changes that affect other handlers in response to an event
+     * that occurs on the current handler. For example, when pressing a particular button, you may 
+     * want to turn off all other buttons in the current row.
+     * 
+     * @param sideEffectsJsonArr 
+     * @param handler 
+     */
     static loadSideEffects(sideEffectsJsonArr: Array<object>, handler: Handler): Array<SideEffect> {
 
         let sideEffects: Array<SideEffect> = [];

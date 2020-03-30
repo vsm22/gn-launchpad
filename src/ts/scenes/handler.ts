@@ -2,7 +2,6 @@ import HandlerType from "./handler-type";
 import HandlerState from "./handler-state";
 import EventType from "./event-type";
 import MidiEvent from "./midi-event";
-import Util from "../util/gn-lp-util";
 import Scene from "./scene";
 import GNLPLoader from "../core/gn-lp-loader";
 
@@ -33,9 +32,7 @@ class Handler {
 
         let minIdx = this.handlerStates[0].index;
         this.handlerStates.forEach(handlerState => minIdx = Math.min(minIdx, handlerState.index));
-        console.log('this.handlerStates.length: ' + this.handlerStates.length);
         this.curHandlerState = this.handlerStates.find(handlerState => handlerState.index === minIdx);
-        console.log('this.curHandlerState: ' + this.curHandlerState);
     }
 
     subscribe(scene: Scene) {
@@ -47,11 +44,13 @@ class Handler {
         let handlerState: HandlerState = this.curHandlerState.clone();
 
         if (handlerEvent.midiBytes[2] > 0) {
+
             // Publish push event
             this.publishEvent(EventType.push, handlerState);
 
             // If there was another push event within double-tap threshold time, publish double tap event
-            if (this.handlerEvents[1].midiBytes[2] > 0
+            if (this.handlerEvents.length > 1 
+                    && this.handlerEvents[1].midiBytes[2] > 0
                     && handlerEvent.timestamp - this.handlerEvents[1].timestamp > GNLPLoader.launchpadConfig["doubleTapTime"]) {
                 this.publishEvent(EventType.doubleTap, handlerState);
             }
@@ -92,14 +91,15 @@ class Handler {
 
     publishEvent(eventType: EventType, handlerState: HandlerState) {
     
-        let nextHandlerStateIdx: number = handlerState.transitions.get(eventType);
-        console.log('nextHandlerStateIdx: ' + nextHandlerStateIdx);
-        this.curHandlerState = this.handlerStates.find(hs => hs.index === nextHandlerStateIdx);
+        if (handlerState.transitions.has(eventType)) {
 
-        this.subscribers.forEach(scene => {
-            console.log('publishEvent this.curHandlerState: ' + this.curHandlerState);
-            scene.notify(this);
-        });
+            let nextHandlerStateIdx: number = handlerState.transitions.get(eventType);
+            this.curHandlerState = this.handlerStates.find(hs => hs.index === nextHandlerStateIdx);
+
+            this.subscribers.forEach(scene => {
+                scene.notify(this);
+            });
+        }
     }
 
     /**
