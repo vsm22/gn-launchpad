@@ -88,13 +88,27 @@ class Scene {
     /**
      * Send side-effect messages to the launchpad.
      * 
+     * SideEffects are messages that are sent to Handlers other than the one
+     * currently invoking the event. For example, when one button is pressed,
+     * all others buttons in the button's row need to be turned off.
+     * In this case, the invoking handler is the button being pressed, while
+     * the side-effects are the messages sent to all other buttons in the row.
+     * 
      * @param handler - The handler invoking the event.
      */
     sendSideEffects(handler: Handler) {
+
         let sideEffects: Array<SideEffect> = handler.curHandlerState.sideEffects;
 
         sideEffects.forEach(sideEffect => {
-        
+            
+            let msg: string = sideEffect.midiBytes[0] + ' ' + sideEffect.midiBytes[1] + ' ' + sideEffect.colorCode;
+
+            if (sideEffect.delay !== null && sideEffect.delay !== undefined && sideEffect.delay > 0) {
+                setTimeout(() => this.toLaunchpad.send(msg), sideEffect.delay);
+            } else {
+                this.toLaunchpad.send(msg);
+            }
         });
     }
 
