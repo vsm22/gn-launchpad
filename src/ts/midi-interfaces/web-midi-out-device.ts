@@ -26,4 +26,4 @@ class WebMidiOutDevice implements MidiOutDeviceInterface {
     }
 }
 
-export default MaxMidiOutDevice;
+export default WebMidiOutDevice;
