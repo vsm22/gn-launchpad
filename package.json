@@ -23,7 +23,7 @@
     "tslint": "^5.20.1",
     "typescript": "^3.7.3",
     "webpack": "^4.41.6",
-    "webpack-cli": "^3.3.11"
+    "webpack-cli": "^3.3.12"
   },
   "dependencies": {
     "@types/node": "^12.12.21",
